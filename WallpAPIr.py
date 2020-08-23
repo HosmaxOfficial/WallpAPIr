@@ -7,11 +7,12 @@ import json
 import random
 from tkinter import *
 from tkinter import filedialog
+from tkinter import ttk
 import ctypes
 
 app = Tk()
 
-url = ""
+vlist = ["Wallhaven"]
 
 def searchImage():
     defaulSearch = "https://wallhaven.cc/api/v1/search"
@@ -44,6 +45,10 @@ def askPath():
 E1 = Entry(app)
 E1.pack( padx = 5, pady = 5 )
 
+
+Combo1 = ttk.Combobox(app, state = "readonly", values = vlist)
+Combo1.set("Select a website")
+Combo1.pack( padx = 5, pady = 5 )
 
 B1 = Button(app, text = "Search", command = searchImage)
 B1.pack( padx = 5, pady = 5 )
