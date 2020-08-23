@@ -27,7 +27,7 @@ def setWallpaper():
     response = r.json()
     lastPage = int(response["meta"]["last_page"])
     url = url + "&page=" + str(random.randint(0,lastPage))
-    imageResponse = response["data"][random.randint(0,len(response["data"]))]["path"]
+    imageResponse = response["data"][random.randint(0,(len(response["data"])-1))]["path"]
     imageRequest = requests.get(imageResponse)
     filePath = directoryPath + "Wallpaper.jpg"
     print(filePath)
