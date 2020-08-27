@@ -13,7 +13,7 @@ import ctypes
 app = Tk()
 
 vlist = ["Wallhaven"]
-
+apiUrl = ["https://wallhaven.cc/api/v1/search"]
 
 def setWallpaper():
     defaulSearch = "https://wallhaven.cc/api/v1/search"
@@ -35,7 +35,7 @@ def setWallpaper():
     file.close()
     ctypes.windll.user32.SystemParametersInfoW(20, 0, filePath, 0)
     
-def askPath():
+def askPath(): #Ask the path to the directory where to place the wallpaper before setting it
     global directoryPath
     directoryPath = filedialog.askdirectory(initialdir = "/", title = "Examine")
     print(directoryPath)
