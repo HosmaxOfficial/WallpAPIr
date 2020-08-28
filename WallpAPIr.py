@@ -11,21 +11,21 @@ from tkinter import filedialog, ttk, Menu
 import ctypes
 
 
-
+#Start
 app = Tk()
 app.title("WallpAPIr")
-app.config(bg = "gray25")
 
 
 
-vlist = ["Wallhaven"]
+#Variables
+vlist = ["Anime and Videogames"]
 apiUrl = ["https://wallhaven.cc/api/v1/search"]
 directoryPath = "/"
 directorySetted = FALSE
 
+#Functions
 def test():
     t = 0
-
 
 def spanish():
     filemenu.entryconfig(1, label = "Salir")
@@ -43,7 +43,6 @@ def english():
     B2.config(text = "Select folder to save")
     Combo1.set("Select a category")
     
-
 def setWallpaper():
     if directorySetted == TRUE:
         defaulSearch = "https://wallhaven.cc/api/v1/search"
@@ -72,6 +71,7 @@ def askPath():                                                                  
     directorySetted = TRUE
     print(directoryPath)
 
+
 menubar = Menu(app)                                                                                                             #Menu
 filemenu = Menu(menubar, tearoff = 0)
 filemenu.add_command(label = "Quit", command = quit)
@@ -88,8 +88,6 @@ settingsmenu.add_cascade(label = "Language", menu = langmenu)
 
 E1 = Entry(app)                                                                                                                 #Entry to search
 E1.pack( padx = 5, pady = 5 )
-E1.config(highlightbackground = "red")
-
 
 Combo1 = ttk.Combobox(app, state = "readonly", values = vlist)
 Combo1.set("Select a category")
@@ -101,6 +99,6 @@ B2.pack( padx = 5, pady = 5 )
 B3 = Button(app, text = "WallpAPIr!", command = setWallpaper)
 B3.pack( padx = 5, pady = 5 )
 
-app.after(400)
+
 app.config(menu = menubar)
 app.mainloop()
