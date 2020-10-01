@@ -18,10 +18,11 @@ app.title("WallpAPIr")
 
 
 #Variables
-vlist = ["Anime and Videogames"]
+engvlist = ["Anime and Videogames", "Photography"]
+espvlist = ["Anime y Videojuegos", "Fotografía"]
 apiUrl = ["https://wallhaven.cc/api/v1/search"]
 directoryPath = "/"
-directorySetted = FALSE
+directorySet = FALSE
 
 #Functions
 def test():
@@ -44,7 +45,7 @@ def english():
     Combo1.set("Select a category")
     
 def setWallpaper():
-    if directorySetted == TRUE:
+    if directorySet == TRUE:
         defaulSearch = "https://wallhaven.cc/api/v1/search"
         search = E1.get()
         global url
@@ -66,9 +67,9 @@ def setWallpaper():
     
 def askPath():                                                                                                                  #Ask the path to the directory where to place the wallpaper before setting it
     global directoryPath
-    global directorySetted
+    global directorySet
     directoryPath = filedialog.askdirectory(initialdir = "/", title = "Examine")
-    directorySetted = TRUE
+    directorySet = TRUE
     print(directoryPath)
 
 
