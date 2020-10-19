@@ -13,9 +13,9 @@ import ctypes
 
 app = Tk()
 app.title("WallpAPIr")
+app.geometry ("720x480")
 
-
-
+datalenwarn = "No pictures found"
 langindex = 0
 engwlist = ["Anime and Videogames", "Photography"]
 espwlist = ["Anime y Videojuegos", "Fotografía"]
@@ -24,6 +24,7 @@ directoryPath = "/"
 directorySet = FALSE
 
 def english():
+    global datalenwarn
     langindex = 0
     filemenu.entryconfig(1, label = "Quit")
     menubar.entryconfig(1, label = "File")
@@ -32,9 +33,10 @@ def english():
     B2.config(text = "Select folder to save")
     Combo1.set("Select a category")
     Combo1.config(values = engwlist)
-
+    datalenwarn = "No pictures found"
 
 def spanish():
+    global datalenwarn
     langindex = 1
     filemenu.entryconfig(1, label = "Salir")
     menubar.entryconfig(1, label = "Archivo")
@@ -43,11 +45,13 @@ def spanish():
     B2.config(text = "Elige una carpeta para guardar")
     Combo1.set("Selecciona una categoría")
     Combo1.config(values = espwlist)
+    datalenwarn = "No se encontraron resultados"
 
     
 def setWallpaper():
     global url
     global directoryPath
+    global datalenwarn
     search = E1.get()
     if directorySet == TRUE:
         if Combo1.current() == 0:
@@ -55,11 +59,28 @@ def setWallpaper():
             url = defaultSearch + "?q=" + search
             print(url)
             r = requests.get(url)
-            response = r.json()
-            lastPage = int(response["meta"]["last_page"])
-            url = url + "&page=" + str(random.randint(0,lastPage))
-            imageResponse = response["data"][random.randint(0,(len(response["data"])-1))]["path"]
-            imageRequest = requests.get(imageResponse)
+            status = r.status_code
+            if status == 200:
+                response = r.json()
+                print(status)
+                lastPage = int(response["meta"]["last_page"])
+                url = url + "&page=" + str(random.randint(0,lastPage))
+                if len(response["data"]) != 0:
+                    imageResponse = response["data"][random.randint(0,(len(response["data"])-1))]["path"]
+                    imageRequest = requests.get(imageResponse)
+                    filePath = directoryPath + "Wallpaper.jpg"
+                    print(filePath)
+                    L1.pack_forget()
+                    file = open(filePath, "wb")
+                    file.write(imageRequest.content)
+                    file.close()
+                    ctypes.windll.user32.SystemParametersInfoW(20, 0, filePath, 0)
+
+                else:
+                    L1.configure(text = datalenwarn)
+                    L1.pack()
+                    
+
 
 # not working yet
 #        elif Combo1.current() == 1:
@@ -72,12 +93,7 @@ def setWallpaper():
 #            imageRequest = requests.get(imageResponse)
 #
         
-        filePath = directoryPath + "Wallpaper.jpg"
-        print(filePath)
-        file = open(filePath, "wb")
-        file.write(imageRequest.content)
-        file.close()
-        ctypes.windll.user32.SystemParametersInfoW(20, 0, filePath, 0)
+
     
 def askPath():                                                                                                                  #Ask for the path to the directory where to place the wallpaper before setting it
     global directoryPath
@@ -114,6 +130,9 @@ B2.pack( padx = 5, pady = 5 )
 B3 = Button(app, text = "WallpAPIr!", command = setWallpaper)
 B3.pack( padx = 5, pady = 5 )
 
+L1 = Label(app, text = datalenwarn)
+L1.pack( padx = 5, pady = 5 )
+L1.pack_forget()
 
 app.config(menu = menubar)
 app.mainloop()
