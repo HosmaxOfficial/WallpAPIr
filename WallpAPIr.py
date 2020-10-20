@@ -15,7 +15,7 @@ app = Tk()
 app.title("WallpAPIr")
 app.geometry ("720x480")
 
-datalenwarn = "No pictures found"
+
 langindex = 0
 engwlist = ["Anime and Videogames", "Photography"]
 espwlist = ["Anime y Videojuegos", "Fotografía"]
@@ -23,9 +23,17 @@ apiUrl = ["https://wallhaven.cc/api/v1/search"]
 directoryPath = "/"
 directorySet = FALSE
 
+datalenwarn = "No pictures found"
+qqwarn = "Page not found"
+dirwarn = "Select a directory"
+combowarn = "Select a category"
+
 def english():
     global datalenwarn
-    langindex = 0
+    global qqwarn
+    global dirwarn
+    global combowarn
+#    langindex = 0
     filemenu.entryconfig(1, label = "Quit")
     menubar.entryconfig(1, label = "File")
     menubar.entryconfig(2, label = "Settings")
@@ -34,10 +42,16 @@ def english():
     Combo1.set("Select a category")
     Combo1.config(values = engwlist)
     datalenwarn = "No pictures found"
+    qqwarn = "Page not found"
+    dirwarn = "Select a directory"
+    combowarn = "Select a category"
 
 def spanish():
     global datalenwarn
-    langindex = 1
+    global qqwarn
+    global dirwarn
+    global combowarn
+#    langindex = 1
     filemenu.entryconfig(1, label = "Salir")
     menubar.entryconfig(1, label = "Archivo")
     menubar.entryconfig(2, label = "Ajustes")
@@ -46,31 +60,39 @@ def spanish():
     Combo1.set("Selecciona una categoría")
     Combo1.config(values = espwlist)
     datalenwarn = "No se encontraron resultados"
+    qqwarn = "Página no encontrada"
+    dirwarn = "Elige una carpeta"
+    combowarn = "Selecciona una categoría"
 
     
 def setWallpaper():
     global url
     global directoryPath
     global datalenwarn
+    global qqwarn
+    global dirwarn
     search = E1.get()
     if directorySet == TRUE:
+        L1.pack_forget()
         if Combo1.current() == 0:
+            L1.pack_forget()
             defaultSearch = "https://wallhaven.cc/api/v1/search"
             url = defaultSearch + "?q=" + search
             print(url)
             r = requests.get(url)
             status = r.status_code
             if status == 200:
+                L1.pack_forget()
                 response = r.json()
                 print(status)
                 lastPage = int(response["meta"]["last_page"])
                 url = url + "&page=" + str(random.randint(0,lastPage))
                 if len(response["data"]) != 0:
+                    L1.pack_forget()
                     imageResponse = response["data"][random.randint(0,(len(response["data"])-1))]["path"]
                     imageRequest = requests.get(imageResponse)
                     filePath = directoryPath + "Wallpaper.jpg"
                     print(filePath)
-                    L1.pack_forget()
                     file = open(filePath, "wb")
                     file.write(imageRequest.content)
                     file.close()
@@ -79,6 +101,16 @@ def setWallpaper():
                 else:
                     L1.configure(text = datalenwarn)
                     L1.pack()
+            else:
+                L1.configure(text = qqwarn)
+                L1.pack()
+        elif Combo1.current() == -1:
+            L1.configure(text = combowarn)
+            L1.pack()
+    else:
+        L1.configure(text = dirwarn)
+        L1.pack()            
+
                     
 
 
